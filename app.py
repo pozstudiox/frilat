@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.secret_key = "frilat-secret-key"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:IwUiBjBRBzYZwSWchIVVMXuKgjYYoApz@postgres.railway.internal:5432/railway'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///frilat.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
