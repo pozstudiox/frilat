@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.username }} | Profile | FriLat{% endblock %}
+
+{% block content %}
+<style>
+/* Sadece pozisyon ve renk! Kutu efekti yok */
+.profile-shield-corner, .profile-admin-corner {
+  position: absolute;
+  top: 18px;
+  font-size: 1.6rem;
+  z-index: 2;
+  cursor: pointer;
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.profile-shield-corner { right: 24px; color: #1c8be6; }
+.profile-admin-corner { right: 70px; color: #dc3545; }
+@media (max-width: 576px) {
+  .profile-shield-corner, .profile-admin-corner {
+    top: 10px;
+    font-size: 1.25rem;
+  }
+  .profile-shield-corner { right: 16px; }
+  .profile-admin-corner { right: 50px; }
+}
+</style>
+
+<section class="py-5">
+  <div class="container">
+    <div class="card p-4 shadow-lg mx-auto position-relative" style="max-width:480px;">
+
+      {% if profile_user.private %}
+        <a href="{{ url_for('private_shield') }}" target="_blank" class="profile-shield-corner" title="This profile is private. Click for more info!">
+          <i class="bi bi-shield-lock-fill"></i>
+        </a>
+      {% endif %}
+      {% if profile_user.is_admin %}
+      <a href="{{ url_for('admin_badge_page') }}" class="profile-admin-corner" title="Admin">
+        <i class="bi bi-shield-fill-exclamation"></i>
+    </a>
+      {% endif %}
+
+      <div class="d-flex flex-column align-items-center">
+        <div class="profile-avatar-rgb mb-3">
+          <img src="{{ profile_user.avatar or '/static/default_avatar.png' }}"
+             alt="Profile Avatar"
+             style="width:108px;height:108px;object-fit:cover; border-radius:50%; border: 3px solid #fff; box-shadow:0 2px 12px #2222;">
+        </div>
+
+        <h2 class="fw-bold mb-0 d-flex align-items-center" style="font-size:1.6rem;">
+          <span class="rainbow-text">{{ profile_user.username }}</span>
+        </h2>
+        {% if profile_user.fullname %}
+        <div class="text-muted small mb-2">{{ profile_user.fullname }}</div>
+        {% endif %}
+        {% if profile_user.bio %}
+        <div class="mb-2 text-center">{{ profile_user.bio }}</div>
+        {% endif %}
+        {% if profile_user.website %}
+          <div>
+            <i class="bi bi-link"></i>
+            <a href="{{ profile_user.website if profile_user.website.startswith('http') else 'https://' ~ profile_user.website }}"
+               target="_blank" rel="noopener">
+              {{ profile_user.website }}
+            </a>
+          </div>
+        {% endif %}
+        <div class="d-flex justify-content-center gap-3 my-2">
+          <div>
+            <span class="fw-semibold">{{ uploads_count }}</span>
+            <span class="text-secondary small">Uploads</span>
+          </div>
+        </div>
+        <div class="small text-muted mt-2">
+          <i class="bi bi-clock-history"></i>
+          Joined: {{ profile_user.created_at.strftime('%d %b %Y') if profile_user.created_at else '-' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% block title %}Upload Files | FriLat{% endblock %}
+
+{% block content %}
+<section class="upload-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="glass-bg rounded-4 shadow-lg p-4">
+                    <h2 class="fw-bold mb-4 text-center gradient-text">Upload your files</h2>
+                    <p class="text-center text-muted mb-4">
+                        Upload images, videos, ZIPs, EXEs, PDFs, or any kind of file.<br>
+                        <span class="fw-semibold text-info">Drag & drop</span> or click below. You can also upload via URL.
+                    </p>
+                    <!-- Upload Area -->
+                    <label id="drop-area" class="upload-drop-area w-100 p-5 rounded-3 d-flex flex-column align-items-center justify-content-center" style="cursor:pointer;">
+                        <i class="bi bi-cloud-arrow-up fs-1 mb-2"></i>
+                        <span class="fs-5 mb-1">Click or drag & drop files here</span>
+                        <input type="file" id="file-input" multiple style="display:none;" />
+                        <div class="small text-secondary">Up to 2GB per file</div>
+                    </label>
+                    <div class="text-center text-secondary my-3">or</div>
+                    <div class="input-group mb-4">
+                        <input type="text" class="form-control" id="url-upload-input" placeholder="Paste a file URL (direct link)...">
+                        <button type="button" class="btn btn-outline-primary" id="url-upload-btn">Upload from URL</button>
+                    </div>
+                    <!-- File Preview List -->
+                    <div id="file-list" class="my-3"></div>
+                    <!-- Expiration select -->
+                    <div class="mb-3" id="expire-select-wrap" style="display:none;">
+                      <label for="expire_minutes">Delete after:</label>
+                      <select id="expire_minutes" name="expire_minutes" class="form-select" style="max-width: 280px;">
+                        <!-- options will be injected dynamically -->
+                      </select>
+                      <p><small>Files 1MB or smaller can be kept indefinitely (no expiration).</small></p>
+                      <span class="text-muted ms-2">Your file will be automatically deleted after this time.</span>
+                    </div>
+                    <!-- Loader -->
+                    <div id="upload-loader" class="text-center my-4" style="display:none;">
+                        <div class="spinner-border text-info" role="status"></div>
+                        <div class="small mt-2">Uploading your file, please wait...</div>
+                    </div>
+                    <!-- Result -->
+                    <div id="upload-result" class="text-center" style="display:none;">
+                        <div class="mb-2 fw-semibold text-success">
+                            <i class="bi bi-link-45deg"></i> Your download page:
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" id="upload-link" class="form-control" readonly>
+                            <button class="btn btn-outline-success" type="button" id="copy-link">Copy Link</button>
+                        </div>
+                        <a id="open-link-btn" class="btn btn-sm btn-primary mb-2" href="#" target="_blank">
+                            <i class="bi bi-box-arrow-up-right"></i> Open Download Page
+                        </a>
+                        <div>
+                            <a class="btn btn-link" href="/upload">Upload another file</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function humanFileSize(size) {
+    if (size === 0) return "0 B";
+    const i = Math.floor(Math.log(size) / Math.log(1024));
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    return (size / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+}
+
+let dropArea = document.getElementById('drop-area');
+let fileInput = document.getElementById('file-input');
+let fileList = document.getElementById('file-list');
+let uploadLoader = document.getElementById('upload-loader');
+let uploadResult = document.getElementById('upload-result');
+let uploadLink = document.getElementById('upload-link');
+let openLinkBtn = document.getElementById('open-link-btn');
+let expireSelectWrap = document.getElementById('expire-select-wrap');
+let expireMinutesSelect = document.getElementById('expire_minutes');
+
+let uploadedFiles = [];
+
+function resetAll() {
+    fileList.innerHTML = '';
+    uploadLoader.style.display = 'none';
+    uploadResult.style.display = 'none';
+    expireSelectWrap.style.display = 'none';
+    uploadedFiles = [];
+}
+
+dropArea.onclick = () => { fileInput.click(); };
+
+fileInput.onchange = function() {
+    handleFiles(this.files);
+};
+
+dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.classList.add('dragover');
+});
+dropArea.addEventListener('dragleave', (e) => {
+    dropArea.classList.remove('dragover');
+});
+dropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+});
+
+function setExpireOptions(fileSize) {
+    const optionsUnder1MB = {
+        0: "No Expiration (≤ 1MB files)",
+        5: "5 Minutes",
+        10: "10 Minutes"
+    };
+    const optionsBetween1MBAnd10MB = {
+        5: "5 Minutes",
+        10: "10 Minutes"
+    };
+    if (fileSize <= 1048576) { // ≤1MB
+        expireMinutesSelect.innerHTML = '';
+        for (const [val, text] of Object.entries(optionsUnder1MB)) {
+            let opt = document.createElement('option');
+            opt.value = val;
+            opt.textContent = text;
+            expireMinutesSelect.appendChild(opt);
+        }
+        expireMinutesSelect.value = '0';
+        expireSelectWrap.style.display = 'block';
+    } else if (fileSize > 1048576 && fileSize <= 10485760) { // >1MB and ≤10MB
+        expireMinutesSelect.innerHTML = '';
+        for (const [val, text] of Object.entries(optionsBetween1MBAnd10MB)) {
+            let opt = document.createElement('option');
+            opt.value = val;
+            opt.textContent = text;
+            expireMinutesSelect.appendChild(opt);
+        }
+        expireMinutesSelect.value = '5';
+        expireSelectWrap.style.display = 'block';
+    } else if (fileSize > 10485760 && fileSize <= 2147483648) { // >10MB and ≤2GB
+        expireMinutesSelect.innerHTML = '';
+        for (const [val, text] of Object.entries(optionsBetween1MBAnd10MB)) {
+            let opt = document.createElement('option');
+            opt.value = val;
+            opt.textContent = text;
+            expireMinutesSelect.appendChild(opt);
+        }
+        expireMinutesSelect.value = '5';
+        expireSelectWrap.style.display = 'block';
+    } else {
+        // >2GB dosyalar için expire seçeneği gösterme
+        expireSelectWrap.style.display = 'none';
+    }
+}
+
+function renderFileList() {
+    if (uploadedFiles.length === 0) {
+        fileList.innerHTML = '';
+        expireSelectWrap.style.display = 'none';
+        return;
+    }
+    let html = `<ul class="list-group mb-3">`;
+    uploadedFiles.forEach((obj, index) => {
+        const f = obj.file;
+        const baseName = obj.newName.replace(/\.[^/.]+$/, "");
+        const ext = f.name.match(/\.[^/.]+$/) ? f.name.match(/\.[^/.]+$/)[0] : "";
+        let icon = "bi-file-earmark";
+        if (f.type.startsWith('image/')) icon = "bi-file-earmark-image";
+        else if (f.type.startsWith('video/')) icon = "bi-file-earmark-play";
+        else if (f.name.endsWith('.zip') || f.name.endsWith('.rar')) icon = "bi-file-earmark-zip";
+        else if (f.name.endsWith('.exe')) icon = "bi-cpu";
+        else if (f.name.endsWith('.pdf')) icon = "bi-file-earmark-pdf";
+
+        html += `<li class="list-group-item d-flex align-items-center gap-3">
+            <i class="bi ${icon} fs-4 text-info"></i>
+            <input type="text" data-index="${index}" class="form-control form-control-sm file-name-input" style="max-width:250px;" value="${baseName}" />
+            <span>${ext}</span>
+            <span class="ms-auto badge bg-light text-dark">${humanFileSize(f.size)}</span>
+            <button class="btn btn-sm btn-outline-danger ms-2 btn-remove-file" data-index="${index}" title="Remove file"><i class="bi bi-x-lg"></i></button>
+        </li>`;
+    });
+    html += `</ul>
+        <button class="btn btn-success w-100 py-2 fw-bold" id="real-upload-btn">Start Upload</button>
+    `;
+    fileList.innerHTML = html;
+
+    document.querySelectorAll('.file-name-input').forEach(input => {
+        input.oninput = function() {
+            const i = parseInt(this.getAttribute('data-index'));
+            let val = this.value.trim();
+            if (val === "") {
+                this.value = uploadedFiles[i].newName.replace(/\.[^/.]+$/, "");
+                return;
+            }
+            const ext = uploadedFiles[i].file.name.match(/\.[^/.]+$/) || "";
+            uploadedFiles[i].newName = val + ext;
+        }
+    });
+
+    document.querySelectorAll('.btn-remove-file').forEach(btn => {
+        btn.onclick = function() {
+            const i = parseInt(this.getAttribute('data-index'));
+            uploadedFiles.splice(i, 1);
+            renderFileList();
+        }
+    });
+
+    document.getElementById("real-upload-btn").onclick = function() {
+        if (uploadedFiles.length === 0) return alert("No files selected!");
+        const formData = new FormData();
+        const toUpload = uploadedFiles[0];
+        formData.append('file', toUpload.file, toUpload.newName);
+        formData.append('expire_minutes', expireMinutesSelect.value);
+        fileList.innerHTML = '';
+        expireSelectWrap.style.display = 'none';
+        uploadLoader.style.display = 'block';
+
+        fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(res => {
+            uploadLoader.style.display = 'none';
+            if (res.link) {
+                uploadResult.style.display = "block";
+                uploadLink.value = res.link;
+                openLinkBtn.href = res.link;
+                uploadedFiles = [];
+            } else {
+                alert(res.error || "Upload failed!");
+            }
+        });
+    }
+}
+
+function handleFiles(files) {
+    resetAll();
+    if (!files || files.length === 0) return;
+
+    uploadedFiles = [];
+    for (let f of files) {
+        uploadedFiles.push({file: f, newName: f.name});
+    }
+
+    setExpireOptions(uploadedFiles[0].file.size);
+    if (uploadedFiles[0].file.size > 2147483648) {
+        expireSelectWrap.style.display = 'none';
+    } else {
+        expireSelectWrap.style.display = 'block';
+    }
+    renderFileList();
+}
+
+// URL'den upload
+document.getElementById("url-upload-btn").onclick = function() {
+    resetAll();
+    let url = document.getElementById("url-upload-input").value.trim();
+    if (!url) return;
+    uploadLoader.style.display = "block";
+    fetch('/api/upload_url', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({url: url})
+    })
+    .then(r => r.json())
+    .then(res => {
+        uploadLoader.style.display = "none";
+        if(res.link){
+            uploadResult.style.display = "block";
+            uploadLink.value = res.link;
+            openLinkBtn.href = res.link;
+        } else {
+            alert(res.error || "Upload failed!");
+        }
+    });
+}
+
+// Copy to clipboard
+document.getElementById("copy-link").onclick = function() {
+    uploadLink.select();
+    uploadLink.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    this.innerHTML = "Copied!";
+    setTimeout(()=>{ this.innerHTML = "Copy Link"; }, 1500);
+}
+</script>
+{% endblock %}

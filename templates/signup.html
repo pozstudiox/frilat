@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Create Account | FriLat{% endblock %}
+
+{% block content %}
+<section class="account-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="glass-bg p-5 rounded-4 shadow-lg">
+          <h2 class="fw-bold mb-3 text-center gradient-text">Create Your FriLat Account</h2>
+          <form method="POST" autocomplete="off">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="signup-username">Username</label>
+              <input type="text" class="form-control" id="signup-username" name="username" required maxlength="20">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="signup-email">Email</label>
+              <input type="email" class="form-control" id="signup-email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="signup-password">Password</label>
+              <input type="password" class="form-control" id="signup-password" name="password" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-success w-100 py-2 fw-bold mb-2">Create Account</button>
+            <div class="text-center small mt-2">
+              Already have an account?
+              <a href="/login" class="link-primary">Sign in</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

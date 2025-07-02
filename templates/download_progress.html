@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Downloading: {{ meta.filename }} | FriLat{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7 col-lg-6">
+        <div class="glass-bg rounded-4 shadow-lg p-5 text-center">
+          <i class="bi bi-arrow-repeat fs-1 text-warning mb-2"></i>
+          <h2 class="fw-bold mb-3">Your download is starting...</h2>
+          <div class="mb-3">
+            <span class="fw-semibold">{{ meta.filename }}</span>
+            <span class="text-muted small ms-2">({{ (meta.size/1024/1024)|round(2) }} MB)</span>
+          </div>
+          <div id="download-countdown" class="mb-3 fs-4 fw-bold text-primary">
+            Download in <span id="countdown-seconds">5</span> seconds...
+          </div>
+          <div>
+            <a id="manual-download-btn" class="btn btn-outline-success px-4 mb-3 disabled" href="{{ url_for('real_download', file_id=file_id) }}" tabindex="-1" aria-disabled="true">
+              <i class="bi bi-download"></i> If your download doesn't start, click here
+            </a>
+          </div>
+          <div class="small text-secondary">Please do not close this page until your download starts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let seconds = 5;
+let countdown = document.getElementById("countdown-seconds");
+let manualBtn = document.getElementById("manual-download-btn");
+
+function startDownload() {
+    countdown.innerText = "Download started!";
+    manualBtn.classList.remove('disabled');
+    manualBtn.removeAttribute('tabindex');
+    manualBtn.removeAttribute('aria-disabled');
+    window.location.href = manualBtn.href;
+}
+
+let interval = setInterval(function() {
+    seconds--;
+    if (seconds > 0) {
+      countdown.innerText = seconds;
+    } else {
+      clearInterval(interval);
+      startDownload();
+    }
+}, 1000);
+</script>
+{% endblock %}

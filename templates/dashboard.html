@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | FriLat{% endblock %}
+
+{% block content %}
+<section class="profile-dashboard py-4">
+  <div class="container">
+    <!-- PROFIL HEADER -->
+    <div class="profile-header d-flex align-items-center justify-content-between flex-wrap mb-3">
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <!-- Profil fotoğrafı ve kullanıcı adı tıklanabilir -->
+        <a href="{{ url_for('user_profile', username=current_user.username) }}" style="text-decoration:none;display:flex;align-items:center;gap:14px;">
+          <img src="{{ current_user.avatar or '/static/default_avatar.png' }}" class="profile-avatar rounded-circle border shadow-sm" style="width:84px;height:84px;object-fit:cover;">
+          <div>
+            <h2 class="fw-bold mb-0 d-flex align-items-center">
+              {{ username }}
+              {% if current_user.is_admin %}
+              <span class="ms-2" title="Platform Admin" style="display:inline-flex;align-items:center;">
+                <i class="bi bi-shield-fill-exclamation text-danger" style="font-size:1.18em; vertical-align:middle; line-height:1;"></i>
+              </span>
+            {% endif %}
+            {% if current_user.private %}
+              <span class="ms-2" title="Private profile" style="display:inline-flex;align-items:center;">
+                <i class="bi bi-shield-lock-fill text-primary" style="font-size:1.18em; vertical-align:middle; line-height:1;"></i>
+              </span>
+            {% endif %}
+            </h2>
+          </div>
+        </a>
+      </div>
+      <div class="d-flex align-items-center gap-3 mt-3 mt-md-0">
+        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#newAlbumModal">
+          <i class="bi bi-images"></i> New Album
+        </button>
+        <a href="/upload" class="btn btn-outline-primary btn-sm" style="font-size:1em;">
+          <i class="bi bi-upload"></i> Upload File
+        </a>
+      </div>
+    </div>
+    <!-- Edit button aşağıya alındı -->
+    <div class="mb-4">
+      <a href="{{ url_for('settings') }}" class="btn btn-outline-dark btn-sm">
+        <i class="bi bi-pencil"></i> Edit Profile
+      </a>
+    </div>
+    <!-- ALBÜMLER LİSTESİ -->
+    {% if albums and albums|length > 0 %}
+    <div class="mb-4">
+      <div class="fw-semibold mb-2"><i class="bi bi-collection"></i> Albums:</div>
+      <div class="d-flex flex-wrap gap-2">
+        {% for album in albums %}
+        <a href="{{ url_for('dashboard', album=album.id) }}" class="badge rounded-pill bg-info text-dark px-3 py-2">
+          <i class="bi bi-images"></i> {{ album.name }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <!-- TAB/FILTER HEADER -->
+    <div class="bg-light rounded-3 px-4 py-3 mb-3 d-flex align-items-center gap-3 justify-content-between flex-wrap">
+      <div class="d-flex gap-4 align-items-center">
+        <a href="{{ url_for('dashboard', sort='recent') }}" class="tab-link {% if request.args.get('sort', 'recent') == 'recent' %}active{% endif %}">
+          <i class="bi bi-clock-history"></i> Recently Uploaded</a>
+        <a href="{{ url_for('dashboard', sort='oldest') }}" class="tab-link {% if request.args.get('sort') == 'oldest' %}active{% endif %}">
+          <i class="bi bi-archive"></i> Oldest</a>
+        <a href="{{ url_for('dashboard', sort='views') }}" class="tab-link {% if request.args.get('sort') == 'views' %}active{% endif %}">
+          <i class="bi bi-star"></i> Most Viewed</a>
+        <a href="{{ url_for('dashboard', sort='az') }}" class="tab-link {% if request.args.get('sort') == 'az' %}active{% endif %}">
+          <i class="bi bi-sort-alpha-down"></i> A-Z</a>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <form class="d-flex gap-2" method="get" action="/dashboard">
+          <input type="text" class="form-control form-control-sm" style="width:180px;" name="q" placeholder="Search in files..." value="{{ request.args.q or '' }}">
+          <button type="submit" class="btn btn-sm btn-outline-primary">Search</button>
+        </form>
+      </div>
+    </div>
+    {% if uploads and uploads|length > 0 %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+        {% for up in uploads %}
+        <div class="col">
+          <div class="card shadow-sm h-100">
+            {% if up.mimetype and up.mimetype.startswith("image/") %}
+              <a href="{{ url_for('download_page', file_id=up.file_id) }}" target="_blank">
+                <img src="{{ url_for('uploaded_file', filename=up.savedname) }}"
+                   class="card-img-top"
+                   style="object-fit:cover;height:170px;">
+              </a>
+            {% else %}
+              <div class="d-flex align-items-center justify-content-center" style="height:170px;background:#f8fafc;">
+                <i class="bi bi-file-earmark-arrow-down fs-1 text-primary"></i>
+              </div>
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+              <div class="fw-bold text-break" title="{{ up.filename }}">{{ up.filename }}</div>
+              <div class="small text-muted mb-2">
+                {{ (up.size/1024)|round }} KB • {{ up.created_at.strftime('%d.%m.%Y') }}
+                {% if up.album %}
+                  <span class="badge bg-light text-dark ms-2"><i class="bi bi-images"></i> {{ up.album.name }}</span>
+                {% endif %}
+              </div>
+              <div class="mt-auto d-flex gap-2">
+                <a href="{{ url_for('download_page', file_id=up.file_id) }}" class="btn btn-sm btn-outline-primary" target="_blank" title="Details">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                <a href="{{ url_for('real_download', file_id=up.file_id) }}" class="btn btn-sm btn-success" title="Download">
+                  <i class="bi bi-download"></i>
+                </a>
+                <form action="{{ url_for('delete_upload', file_id=up.file_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this file?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state text-center py-5">
+        <div class="display-2 mb-2" style="color:#d6dde7;"><i class="bi bi-inbox"></i></div>
+        <div class="mb-3 text-muted fs-5">There is nothing to display here yet.</div>
+        <a href="/upload" class="btn btn-primary btn-lg"><i class="bi bi-cloud-arrow-up"></i> Upload File</a>
+      </div>
+    {% endif %}
+    <!-- ALBUM CREATE MODAL -->
+    <div class="modal fade" id="newAlbumModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <form class="modal-content" action="/album/create" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title">Create New Album</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="text" name="album_name" class="form-control" required minlength="2" maxlength="100" placeholder="Album name">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

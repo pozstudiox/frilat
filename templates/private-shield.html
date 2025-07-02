@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Private Profile | FriLat{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="mx-auto text-center" style="max-width:460px;">
+    <div class="mb-3">
+      <i class="bi bi-shield-lock-fill" style="font-size:3.1rem;color:#1c8be6;"></i>
+    </div>
+    <h2 class="fw-bold mb-2">This Profile is Private</h2>
+    <div class="text-muted mb-3">You see a <i class="bi bi-shield-lock-fill" style="color:#1c8be6;"></i> icon. Here’s what it means:</div>
+    <div class="card p-3 text-start mb-3" style="background:rgba(28,139,230,0.08);border:1px solid #e5f3ff;">
+      <ul class="mb-0">
+        <li><b>Limited Information:</b> Only basic profile data (such as username, avatar, join date, and bio) is visible to others.</li>
+        <li><b>Media Protection:</b> User’s uploads, albums, and download links are hidden from public access.</li>
+        <li><b>No Direct Contact:</b> You can’t follow, message, or see full social details of this account.</li>
+        <li><b>Enhanced Privacy:</b> This user prefers to keep their activity, uploads, and connections private for extra safety.</li>
+        <li><b>Security for Creators:</b> Private mode protects your files from unwanted views or downloads by non-followers.</li>
+        <li><b>Search Visibility:</b> Private profiles may not appear in user searches or ranking lists.</li>
+        <li><b>Why Private?</b> Some users choose privacy for security, peace of mind, or just to have a more closed, personal experience on FriLat.</li>
+        <li><b>How to Become Private?</b> You can enable or disable privacy anytime in your <a href="/settings" class="text-primary">profile settings</a>.</li>
+      </ul>
+    </div>
+    <p>
+      <b>Note:</b> If you are the owner of this account, you can still see and manage all your content after logging in.<br>
+      If you have questions, check out our <a href="/faq" class="text-primary">FAQ</a> or <a href="/support" class="text-primary">contact support</a>.
+    </p>
+
+  </div>
+</div>
+{% endblock %}

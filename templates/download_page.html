@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Download | FriLat{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Dosya sahibi bölümü -->
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <a href="{{ url_for('user_profile', username=meta.uploader) }}" target="_blank" style="text-decoration:none;">
+      <img src="{{ uploader_avatar }}" class="rounded-circle border shadow-sm" style="width:40px;height:40px;object-fit:cover;">
+    </a>
+    <div>
+      <a href="{{ url_for('user_profile', username=meta.uploader) }}" target="_blank" class="fw-bold text-dark" style="text-decoration:none;">
+        {{ meta.uploader }}
+      </a>
+      <div class="small text-muted">Uploader</div>
+    </div>
+  </div>
+
+  <!-- Eğer kendi upload'un ise uyarı göster -->
+  {% if current_user and meta.uploader == current_user.username %}
+    <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+      <i class="bi bi-person-check fs-4 me-2"></i>
+      <span>This is your upload. <a href="{{ url_for('dashboard') }}" class="alert-link">Go to dashboard</a></span>
+    </div>
+  {% endif %}
+
+  <!-- Dosya Kartı -->
+  <div class="card shadow-sm mb-5" style="max-width:500px;">
+    <div class="card-body">
+      <h4 class="card-title mb-2">{{ meta.filename }}</h4>
+      <ul class="list-unstyled small mb-3">
+        <li><b>File size:</b> {{ "%.2f"|format(meta.size/1024) }} KB</li>
+        <li><b>Type:</b> {{ meta.type or "Unknown" }}</li>
+      </ul>
+      <a href="{{ url_for('download_progress', file_id=file_id) }}" class="btn btn-success btn-lg fw-bold px-5">
+        <i class="bi bi-download"></i> Download
+      </a>
+    </div>
+  </div>
+
+  <!-- Ekstra bilgi veya uyarı göstermek istersen buraya ekleyebilirsin -->
+
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Support | FriLat{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="mx-auto" style="max-width:850px;">
+    <h1 class="fw-bold mb-3 text-center gradient-text" style="font-size:2.2rem;">
+      <i class="bi bi-life-preserver"></i> Support & Help Center
+    </h1>
+    <div class="card p-4 shadow-sm border-0" style="background:#f9fafc;">
+      <h4 class="text-primary mb-3">Need help? You’re in the right place!</h4>
+      <p>
+        The FriLat Support Center is designed to assist you quickly and clearly—whether you’re facing a technical problem, have a question about features, or want to suggest an improvement.
+      </p>
+
+      <h5 class="mt-4 mb-2 text-primary">Popular Topics</h5>
+      <ul>
+        <li><b>Uploading & Sharing:</b> How to upload files, set self-destruction timers, and generate download links.</li>
+        <li><b>Account & Privacy:</b> Managing your profile, privacy settings, and what information is visible.</li>
+        <li><b>Albums & Organization:</b> Creating albums, moving files, and keeping your uploads organized.</li>
+        <li><b>Pro Membership:</b> What do you get? How to upgrade, and rainbow effects on your profile.</li>
+        <li><b>File Removal:</b> How to delete uploads manually or set auto-deletion after a certain time.</li>
+      </ul>
+
+      <h5 class="mb-2 mt-4 text-primary">Frequently Asked Questions (FAQ)</h5>
+      <div class="accordion mb-3" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1c" aria-expanded="false">
+              Is FriLat really free?
+            </button>
+          </h2>
+          <div id="faq1c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Yes! All core features are free forever. Optional Pro membership unlocks visual effects and extra features, but will never block basic uploads or privacy controls.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2c" aria-expanded="false">
+              How long are my files stored?
+            </button>
+          </h2>
+          <div id="faq2c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              You choose! You can upload permanent files, or set them to auto-delete (for example, after 5 or 10 minutes). You have full control.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3c" aria-expanded="false">
+              Is my data and identity private?
+            </button>
+          </h2>
+          <div id="faq3c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Absolutely. FriLat has strict privacy settings. You can make your profile completely private or public—your choice. Your files and details are never sold or leaked.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4c" aria-expanded="false">
+              Can I delete my account?
+            </button>
+          </h2>
+          <div id="faq4c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Yes, simply contact support using the form below, and your account will be permanently deleted within 24 hours. No data will be kept after deletion.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="mb-2 mt-4 text-primary">Still need help?</h5>
+      <p>
+        If you have a technical issue, found a bug, or want to suggest a new feature, please use the form below.  
+        <b>All support requests are handled within 24 hours.</b> Your feedback shapes the future of FriLat!
+      </p>
+
+      <form class="row g-3" method="post" action="/support">
+        <div class="col-12 col-md-6">
+          <label class="form-label">Your Email (optional)</label>
+          <input type="email" name="email" class="form-control" placeholder="your@email.com">
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Type of Request</label>
+          <select class="form-select" name="type">
+            <option value="question">General Question</option>
+            <option value="bug">Report a Bug</option>
+            <option value="feature">Suggest a Feature</option>
+            <option value="account">Account/Privacy Issue</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" name="message" rows="4" placeholder="How can we help you? Please give as much detail as possible." required></textarea>
+        </div>
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-primary px-4">Send Request</button>
+        </div>
+      </form>
+
+      <div class="bg-white rounded-3 border p-3 mt-4">
+        <b>Tip:</b> For instant help or feedback, you can also email <a href="mailto:support@frilat.com">support@frilat.com</a>
+      </div>
+
+      <div class="text-center small text-secondary mt-4">
+        FriLat Support Center &copy; 2025 — <span class="text-info">Powered by community feedback</span>
+      </div>
+      <div class="text-center mt-4">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

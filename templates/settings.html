@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Settings | FriLat{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 position-relative">
+
+      <a href="{{ url_for('logout') }}"
+         class="btn btn-outline-danger position-absolute top-0 end-0 mt-2 me-1">
+        <i class="bi bi-box-arrow-right"></i> Log out
+      </a>
+
+      <h3 class="fw-bold mb-4">Settings</h3>
+      <div class="row">
+        <div class="col-md-3 border-end">
+          <ul class="nav flex-column nav-pills gap-2" id="profileTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="tab-account-tab" data-bs-toggle="pill" href="#tab-account" role="tab"><i class="bi bi-person"></i> Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-profile-tab" data-bs-toggle="pill" href="#tab-profile" role="tab"><i class="bi bi-person-badge"></i> User Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-password-tab" data-bs-toggle="pill" href="#tab-password" role="tab"><i class="bi bi-key"></i> Password</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tab-social-tab" data-bs-toggle="pill" href="#tab-social" role="tab"><i class="bi bi-diagram-3"></i> Connected Accounts</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-content">
+
+            <!-- Account Tab -->
+            <div class="tab-pane fade show active" id="tab-account" role="tabpanel">
+              <!-- Avatar Yükleme Formu -->
+              <form method="POST" action="{{ url_for('upload_avatar') }}" enctype="multipart/form-data" class="mb-2 d-flex flex-column align-items-center">
+                <img src="{{ current_user.avatar or '/static/default_avatar.png' }}" alt="Profile Avatar"
+                  class="rounded-circle mb-2" style="width:120px;height:120px;object-fit:cover;">
+                <label class="btn btn-outline-secondary btn-sm" for="avatar-upload">
+                  <i class="bi bi-cloud-arrow-up"></i> Upload avatar
+                  <input type="file" name="avatar" id="avatar-upload" accept="image/*" style="display:none;" onchange="this.form.submit();">
+                </label>
+              </form>
+              <!-- Remove avatar (sadece custom avatar ise) -->
+              {% if current_user.avatar and not current_user.avatar.startswith('/static') %}
+              <form action="{{ url_for('remove_avatar') }}" method="POST" class="mb-4 d-flex justify-content-center">
+                <button type="submit" class="btn btn-outline-danger btn-sm mt-2">
+                  <i class="bi bi-trash"></i> Remove avatar
+                </button>
+              </form>
+              {% endif %}
+
+              <!-- Profil Bilgileri Formu (avatar ile ilgisiz, ayrı formda!) -->
+              <form method="POST">
+                <input type="hidden" name="profile_save" value="1">
+                <div class="form-check mb-3">
+                  <!-- input'un name'i "private" -->
+                  <input class="form-check-input" type="checkbox" name="private" id="private-check"
+                    {% if current_user.private %}checked{% endif %}>
+                  <label class="form-check-label" for="private-check">
+                    Make my profile and identity private
+                  </label>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" name="fullname" value="{{ current_user.fullname or '' }}">
+                  <div class="form-text">This will be displayed on your profile.</div>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Website</label>
+                  <input type="text" class="form-control" name="website" value="{{ current_user.website or '' }}" placeholder="http://yourwebsite.com">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Bio</label>
+                  <textarea class="form-control" name="bio" rows="3" placeholder="Tell us about yourself...">{{ current_user.bio or '' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary px-4">Save changes</button>
+              </form>
+            </div>
+
+            <!-- User Profile Tab -->
+            <div class="tab-pane fade" id="tab-profile" role="tabpanel">
+              <h5>User Profile</h5>
+              <form method="POST" action="{{ url_for('update_user_profile') }}">
+                <div class="mb-3">
+                  <label for="location" class="form-label">Location</label>
+                  <input type="text" class="form-control" id="location" name="location" value="{{ current_user.location or '' }}" placeholder="Your location">
+                </div>
+                <div class="mb-3">
+                  <label for="occupation" class="form-label">Occupation</label>
+                  <input type="text" class="form-control" id="occupation" name="occupation" value="{{ current_user.occupation or '' }}" placeholder="Your occupation">
+                </div>
+                <div class="mb-3">
+                  <label for="interests" class="form-label">Interests</label>
+                  <textarea class="form-control" id="interests" name="interests" rows="3" placeholder="Your interests">{{ current_user.interests or '' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+              </form>
+            </div>
+
+            <!-- Password Tab -->
+            <div class="tab-pane fade" id="tab-password" role="tabpanel">
+              <form method="POST" action="{{ url_for('change_password') }}">
+                <h5>Change Password</h5>
+                <p><small>Passwords can only be changed once every 3 hours.</small></p>
+                <div class="mb-3">
+                  <label class="form-label">Current password</label>
+                  <input type="password" name="current_password" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">New password</label>
+                  <input type="password" name="new_password" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Confirm new password</label>
+                  <input type="password" name="confirm_password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Change password</button>
+              </form>
+            </div>
+
+            <!-- Connected Accounts Tab -->
+            <div class="tab-pane fade" id="tab-social" role="tabpanel">
+              <h5>Connected Accounts</h5>
+              <div class="alert alert-info">Social login and connected account features will be available soon!</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Bootstrap tab navigation fix
+  const hash = window.location.hash;
+  if (hash) {
+    const tabTrigger = document.querySelector(`[href="${hash}"]`);
+    if (tabTrigger) {
+      new bootstrap.Tab(tabTrigger).show();
+    }
+  }
+</script>
+{% endblock %}

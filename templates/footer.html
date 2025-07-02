@@ -1,0 +1,88 @@
+<footer class="footer-section py-4 mt-5 text-center position-relative" style="background: linear-gradient(90deg, #f8fafc 0%, #e9f1ff 100%); border-top:1px solid #e0e6ef;">
+    <div class="container">
+        <!-- Social icons -->
+        <div class="mb-3 d-flex justify-content-center gap-3">
+            <a href="https://github.com/pozim" target="_blank" class="footer-icon-link" title="GitHub">
+                <i class="bi bi-github"></i>
+            </a>
+            <a href="https://twitter.com/pozim" target="_blank" class="footer-icon-link" title="Twitter">
+                <i class="bi bi-twitter-x"></i>
+            </a>
+            <a href="mailto:support@frilat.com" class="footer-icon-link" title="E-Mail">
+                <i class="bi bi-envelope-fill"></i>
+            </a>
+            <a href="https://frios.org/forum" target="_blank" class="footer-icon-link" title="Forum">
+                <i class="bi bi-chat-dots-fill"></i>
+            </a>
+        </div>
+        <div class="mb-2 footer-links">
+            <a href="/about" class="footer-link">About</a> ·
+            <a href="/faq" class="footer-link">FAQ</a> ·
+            <a href="/support" class="footer-link">Support</a>
+        </div>
+        <!-- Eklenti, API, Terms, Privacy, Contact -->
+        <div class="mb-2 footer-links d-flex flex-wrap justify-content-center gap-3" style="font-size:1.09em;">
+            <a href="/plugin" class="footer-link d-inline-flex align-items-center gap-1">
+                <i class="bi bi-code-slash"></i> Plugin
+            </a>
+            <a href="/api" class="footer-link d-inline-flex align-items-center gap-1">
+                <i class="bi bi-gear"></i> API
+            </a>
+            <a href="/terms" class="footer-link d-inline-flex align-items-center gap-1">
+                <i class="bi bi-bank"></i> Terms of Service
+            </a>
+            <a href="/privacy" class="footer-link d-inline-flex align-items-center gap-1">
+                <i class="bi bi-lock-fill"></i> Privacy
+            </a>
+
+        </div>
+        <div class="small text-muted">
+            &copy; 2025 <span class="fw-semibold">FriLat</span>
+            <span class="mx-1">—</span>
+            Made with <i class="bi bi-heart-fill text-danger"></i> by <span class="fw-semibold">Pozi</span>
+        </div>
+        <!-- Back to top -->
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});" class="back-to-top position-absolute end-0 bottom-0 m-3 d-inline-flex align-items-center px-2 py-1 rounded bg-white border small shadow-sm" style="text-decoration:none;opacity:0.75;transition:.15s;">
+            <i class="bi bi-arrow-up-short fs-5"></i>
+            <span class="ms-1">Top</span>
+        </a>
+    </div>
+    <style>
+      .footer-section {
+        font-size: 1.05em;
+        box-shadow: 0 -2px 24px 0 #e6edfb77;
+      }
+      .footer-link {
+        color: #4672e6;
+        text-decoration: none;
+        transition: color .2s;
+        font-weight: 500;
+      }
+      .footer-link:hover {
+        color: #314ca3;
+        text-decoration: underline;
+      }
+      .footer-icon-link {
+        color: #2e384d;
+        font-size: 1.4em;
+        margin: 0 .25em;
+        transition: color .2s, transform .15s;
+        opacity: 0.82;
+      }
+      .footer-icon-link:hover {
+        color: #4672e6;
+        opacity: 1;
+        transform: scale(1.18);
+      }
+      .back-to-top:hover {
+        opacity: 1;
+        background: #f0f4ff;
+        color: #314ca3;
+      }
+      @media (max-width: 600px) {
+        .footer-section { font-size: .97em;}
+        .back-to-top { right: 50%; transform: translateX(50%);}
+        .footer-links { flex-direction: column !important; gap: 6px !important;}
+      }
+    </style>
+</footer>

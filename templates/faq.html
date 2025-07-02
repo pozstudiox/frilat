@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}FAQ | FriLat{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h1 class="fw-bold mb-4 text-center gradient-text">Frequently Asked Questions</h1>
+    <p class="lead text-center mb-5">All you need to know about FriLat and its features.<br>
+      Still have questions? <a href="/support">Contact Support</a></p>
+    
+    <div class="accordion" id="faqAccordion">
+      <!-- 1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq1">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1c" aria-expanded="true" aria-controls="faq1c">
+            What is FriLat?
+          </button>
+        </h2>
+        <div id="faq1c" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            FriLat is an advanced and user-friendly file hosting platform developed for seamless uploads, instant sharing, and community-driven storage management. You can upload, organize, and share images, documents, videos, and more—without hassle.
+          </div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2c" aria-expanded="false" aria-controls="faq2c">
+            Who can use FriLat? Is it free?
+          </button>
+        </h2>
+        <div id="faq2c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Anyone can create a free account and start uploading files right away. We also offer <b>Pro</b> features for users who want advanced tools and unlimited storage. See the <a href="/pro">Pro page</a> for more details.
+          </div>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3c" aria-expanded="false" aria-controls="faq3c">
+            How secure is my data?
+          </button>
+        </h2>
+        <div id="faq3c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Security is our priority. All files are stored securely on our servers, and every user can enable private mode for maximum privacy. Premium users also get advanced sharing controls and protection.
+          </div>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq4">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4c" aria-expanded="false" aria-controls="faq4c">
+            Can I delete files after uploading?
+          </button>
+        </h2>
+        <div id="faq4c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes. You can manage and permanently delete any of your files from your dashboard. Temporary uploads will be auto-removed after their expiry time, as chosen during upload.
+          </div>
+        </div>
+      </div>
+      <!-- 5 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq5">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5c" aria-expanded="false" aria-controls="faq5c">
+            Does FriLat have an API?
+          </button>
+        </h2>
+        <div id="faq5c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <b>Yes!</b> Developers can use our public API endpoints to upload and manage files programmatically. Detailed documentation will be available soon. For early access, <a href="/support">contact us</a>.
+          </div>
+        </div>
+      </div>
+      <!-- 6 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq6">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6c" aria-expanded="false" aria-controls="faq6c">
+            What file types are supported?
+          </button>
+        </h2>
+        <div id="faq6c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            FriLat supports images, videos, documents, archives, executables, and more. Maximum file size and allowed extensions may vary based on your account type.
+          </div>
+        </div>
+      </div>
+      <!-- 7 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq7">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7c" aria-expanded="false" aria-controls="faq7c">
+            Is there a limit to the number of uploads?
+          </button>
+        </h2>
+        <div id="faq7c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Free users have a generous limit per file and per day. <b>Pro</b> users enjoy higher limits and advanced features like batch uploads, albums, and more.
+          </div>
+        </div>
+      </div>
+      <!-- 8 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq8">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8c" aria-expanded="false" aria-controls="faq8c">
+            How can I report abuse or inappropriate content?
+          </button>
+        </h2>
+        <div id="faq8c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            We take abuse seriously. Please report any suspicious or inappropriate files via our <a href="/support">Support page</a>. Our team investigates all reports promptly.
+          </div>
+        </div>
+      </div>
+      <!-- 9 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq9">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9c" aria-expanded="false" aria-controls="faq9c">
+            Who maintains FriLat?
+          </button>
+        </h2>
+        <div id="faq9c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            FriLat is developed and maintained by a dedicated team of developers who are passionate about open technology and community-driven projects. We constantly improve and update the platform based on your feedback.
+          </div>
+        </div>
+      </div>
+      <!-- 10 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq10">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10c" aria-expanded="false" aria-controls="faq10c">
+            How do I get support or suggest new features?
+          </button>
+        </h2>
+        <div id="faq10c" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Simply head over to our <a href="/support">Support page</a> to send us your questions, bug reports, or feature requests. We value user feedback and respond as quickly as possible!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

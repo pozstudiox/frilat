@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Admin & Badges | FriLat{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="mx-auto" style="max-width:700px;">
+    <div class="text-center mb-3">
+      <i class="bi bi-shield-fill-exclamation" style="font-size:2.7rem;color:#dc3545;"></i>
+      <h2 class="fw-bold mt-2 mb-1">Active Admins</h2>
+      <p class="lead text-muted mb-4">
+        Meet the official FriLat platform admins.<br>
+        These trusted users help protect and improve your experience.
+      </p>
+    </div>
+
+    <!-- Active Admins with badges -->
+    <div class="mb-4">
+      <div class="row row-cols-2 row-cols-md-3 g-4 justify-content-center">
+        {% for admin in active_admins %}
+        <div class="col d-flex align-items-center flex-column">
+          <img src="{{ admin.avatar or '/static/default_avatar.png' }}" alt="{{ admin.username }} avatar"
+            class="rounded-circle mb-2 border shadow-sm" style="width:64px;height:64px;object-fit:cover;">
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-semibold" style="font-size:1.13rem;">{{ admin.username }}</span>
+            {% if admin.badge == "Admin" %}
+              <span title="Platform Admin">
+                <i class="bi bi-shield-fill-exclamation text-danger" style="font-size:1.13rem;vertical-align:-0.08em;"></i>
+              </span>
+            {% elif admin.badge == "TIF" %}
+              <span title="TIF (Trusted, Influencer, Founder)">
+                <i class="bi bi-star-fill text-warning" style="font-size:1.11rem;vertical-align:-0.11em;"></i>
+              </span>
+            {% elif admin.badge == "Staff" %}
+              <span title="Staff / Moderator">
+                <i class="bi bi-person-badge-fill text-primary" style="font-size:1.11rem;vertical-align:-0.11em;"></i>
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="mb-4 text-center">
+      <h3 class="fw-bold mb-3">Badge Types & Meanings</h3>
+      <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+        <div class="col">
+          <div class="card p-3 h-100 border-danger-subtle border-2">
+            <div class="text-center mb-2">
+              <i class="bi bi-shield-fill-exclamation text-danger" style="font-size:2rem;"></i>
+            </div>
+            <div class="fw-bold mb-1">Admin</div>
+            <div class="small text-secondary">
+              <b>Full platform access.</b> Only FriLat founders and the core development team.<br>
+              Admins ensure platform safety, oversee major updates, and resolve high-level issues.
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card p-3 h-100 border-warning-subtle border-2">
+            <div class="text-center mb-2">
+              <i class="bi bi-star-fill text-warning" style="font-size:2rem;"></i>
+            </div>
+            <div class="fw-bold mb-1">TIF <span class="text-muted">(Trusted / Influencer / Founder)</span></div>
+            <div class="small text-secondary">
+              <b>Special recognition for major contributors.</b> Early supporters, partners, and community leaders.<br>
+              This badge is rare and manually assigned.
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card p-3 h-100 border-primary-subtle border-2">
+            <div class="text-center mb-2">
+              <i class="bi bi-person-badge-fill text-primary" style="font-size:2rem;"></i>
+            </div>
+            <div class="fw-bold mb-1">Staff / Moderator</div>
+            <div class="small text-secondary">
+              <b>Helps users, resolves disputes, moderates uploads.</b><br>
+              Chosen for trustworthiness and platform knowledge.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-muted mt-4">
+        Only profiles listed above are recognized as active FriLat admins or staff.<br>
+        If you see a badge or someone claims admin/staff status outside this list, <a href="/support" class="text-primary">let us know</a>.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
