@@ -80,26 +80,6 @@
               </form>
             </div>
 
-            <!-- User Profile Tab -->
-            <div class="tab-pane fade" id="tab-profile" role="tabpanel">
-              <h5>User Profile</h5>
-              <form method="POST" action="{{ url_for('update_user_profile') }}">
-                <div class="mb-3">
-                  <label for="location" class="form-label">Location</label>
-                  <input type="text" class="form-control" id="location" name="location" value="{{ current_user.location or '' }}" placeholder="Your location">
-                </div>
-                <div class="mb-3">
-                  <label for="occupation" class="form-label">Occupation</label>
-                  <input type="text" class="form-control" id="occupation" name="occupation" value="{{ current_user.occupation or '' }}" placeholder="Your occupation">
-                </div>
-                <div class="mb-3">
-                  <label for="interests" class="form-label">Interests</label>
-                  <textarea class="form-control" id="interests" name="interests" rows="3" placeholder="Your interests">{{ current_user.interests or '' }}</textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Profile</button>
-              </form>
-            </div>
-
             <!-- Password Tab -->
             <div class="tab-pane fade" id="tab-password" role="tabpanel">
               <form method="POST" action="{{ url_for('change_password') }}">
@@ -120,13 +100,6 @@
                 <button type="submit" class="btn btn-primary">Change password</button>
               </form>
             </div>
-
-            <!-- Connected Accounts Tab -->
-            <div class="tab-pane fade" id="tab-social" role="tabpanel">
-              <h5>Connected Accounts</h5>
-              <div class="alert alert-info">Social login and connected account features will be available soon!</div>
-            </div>
-
           </div>
         </div>
       </div>
